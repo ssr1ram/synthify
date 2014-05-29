@@ -2,7 +2,11 @@
 
 A minimalist component-ized fork of Jon Abrams synth. The easiest web framework for synthesizing API-first web apps that also have web front-ends.
 
-## Documentation
+## Install
+
+`npm install git+https://github.com/ssr1ram/synthify.git`
+
+## Example
 
 ```js
 var express = require('express');
@@ -21,7 +25,7 @@ var server = app.listen(3000, function() {
 });
 ```
 
-For complete up-to-date documentation, tutorials, and example apps, check out [synthjs.com](http://www.synthjs.com).
+For a more full featured product and the source of inspiration for this please see [synthjs.com](http://www.synthjs.com).
 
 ## License
 
@@ -30,5 +34,4 @@ For complete up-to-date documentation, tutorials, and example apps, check out [s
 ## Credit
 
 - Original Creators
-- This project was created by Jon Abrams ([Twitter](https://twitter.com/JonathanAbrams) | [GitHub](https://github.com/JonAbrams)).
-- Special thanks to Stephen Ausman (aka [stackd](https://github.com/stackd)) for handing over control of the 'synth' package on NPM.
+- This project was inspired by synthjs created by Jon Abrams ([Twitter](https://twitter.com/JonathanAbrams) | [GitHub](https://github.com/JonAbrams)).
