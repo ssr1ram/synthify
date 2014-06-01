@@ -2,11 +2,24 @@
 
 A minimalist component-ized fork of Jon Abrams synth. The easiest web framework for synthesizing API-first web apps that also have web front-ends.
 
+## Dependencies
+
+```
+npm install yo -g
+npm install gulp -g
+```
+
 ## Install
 
-`npm install git+https://github.com/ssr1ram/synthify.git`
+The easiest way to get started is to use the yeoman generator
 
-## Example
+```
+# yo install git+https://github.com/ssr1ram/generator-synthify.git -g`
+# mkdir project
+# cd project
+# yo synthify
+
+## Example Usage
 
 
 ```js
@@ -16,27 +29,28 @@ var synthify = require('synthify')
 var app = express();
 
 var synthoptions = {
-    basedir: "back/resources"
 };
 
-synthify.resources(app, synthoptions);
+synthify.doapi(app, synthoptions);
+synthify.dopages(app, synthoptions);
 
 var server = app.listen(3000, function() {
         console.log('Listening on port %d', server.address().port);
 });
 ```
 
-Given a base directory structure like
+## api
+
+Base directory structure
 
 ```
-back/
-    resources/
-        tweets/
-            getIndex.js
-        memoes/
-            blah.js
+api/
+   tweets/
+       getIndex.js
+   memoes/
+       blah.js
 
-options.basedir = "back/resources";
+options.apidir = "api";
 ```
 
 You can then declare a request handler for a specific HTTP method in any file that is in the resources directory by assigning a function to exports.<method><optional: ActionName>.
@@ -65,7 +79,57 @@ exports.getAnything_else:
     exports.postPublish responds to POST /api/memoes/publish?id=124.
 ```
 
-For a more full featured product and the source of inspiration for this please see [synthjs.com](http://www.synthjs.com).
+## pages
+
+base directory structure
+
+```
+pages/
+    bar.jade
+    defaults/
+        layout.jade
+    foo/
+        foo.jade
+        foo.coffee
+    index.jade
+    pages.json
+
+options.pagesdir = "pages";
+```
+
+And a pages.json having
+
+```
+{
+    "pages": [
+        {
+            "route": "/",
+            "viewFile": "index.jade"
+        },
+        {
+            "route": "/foo",
+            "viewFile": "foo/foo.jade",
+            "preload": ["/api/foo"]
+        },
+        {
+            "route": "/bar",
+            "viewFile": "bar.jade"
+        }
+    ]
+}
+```
+
+You get the following routes
+
+```
+http://localhost:3000/ - serves pages/index.jade
+http://localhost:3000/foo - preloads /api/foo and serves
+pages/foo/foo.jade
+http://localhost:3000/bar - serves pages/bar.jade
+http://localhost:3000/api/tweets - serves
+api/tweets/[getIndex.js:getIndex()]
+```
+
 
 ## License
 
