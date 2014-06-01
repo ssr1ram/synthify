@@ -1,26 +1,45 @@
 var path = require('path');
 
-var handlersParser = require('./lib/handlersParser.js');
-var handlers;
+var apiParser = require('./lib/apiParser.js');
+var pagesParser = require('./lib/pagesParser.js');
 
-/* the main synthify function */
-module.exports.resources = function (app, options) {
-  options = options || {basedir: 'back/resources'};
-  var resourceDir = options.resourceDir || path.join(process.cwd(), options.basedir);
+var defaultoptions = {
+    apidir: 'api',
+    pagesdir: "pages"
+};
+
+var getApihandlers = function(options) {
+  options = options || {};
+  options.apidir = options.apidir || defaultoptions.apidir;
+  var resourceDir = options.resourceDir || path.join(process.cwd(), options.apidir);
 
   /* On startup, parse all the resource handling modules */
-  handlers = handlersParser.parse(resourceDir);
+  handlers = apiParser.parse(resourceDir);
+  return handlers;
+};
+var getPageshandlers = function(options) {
+  options = options || {};
+  options.pagesdir = options.pagesdir || defaultoptions.pagesdir;
+  var resourceDir = options.resourceDir || path.join(process.cwd(), options.pagesdir);
 
+  /* On startup, parse all the resource handling modules */
+  handlers = pagesParser.parse(resourceDir);
+  return handlers;
+};
+
+/* the synthify doapi function */
+module.exports.doapi = function (app, options) {
+   var apihandlers = getApihandlers(options);
 
   /* Tell the express app to listen for each API request handler */
   var registerHandler = function (handler) {
     app[handler.method]( handler.path, handler.func() );
   };
   /* Register the custom actions first */
-  handlers.filter(function (handler) {
+  apihandlers.filter(function (handler) {
     return handler.isCustom;
   }).forEach(registerHandler);
-  handlers.filter(function (handler) {
+  apihandlers.filter(function (handler) {
     return !handler.isCustom;
   }).forEach(registerHandler);
 
@@ -28,4 +47,11 @@ module.exports.resources = function (app, options) {
   app.all('/api/*', function (req, res) {
     res.send(404, { error: 'Resource not found'});
   });
+};
+
+module.exports.dopages = function(app, options) {
+  options = options || {};
+  options.pagesdir = options.pagesdir || defaultoptions.pagesdir;
+  var resourceDir = options.resourceDir || path.join(process.cwd(), options.pagesdir);
+  pagesParser.parse(app, resourceDir);
 };
