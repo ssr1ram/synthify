@@ -32,7 +32,9 @@ var synthoptions = {
 };
 
 synthify.doapi(app, synthoptions);
-synthify.dopages(app, synthoptions);
+synthify.doroutes(app, synthoptions);
+
+app.set('views', __dirname + '/pages');
 
 var server = app.listen(3000, function() {
         console.log('Listening on port %d', server.address().port);
@@ -45,10 +47,8 @@ Base directory structure
 
 ```
 api/
-   tweets/
+   foo/
        getIndex.js
-   memoes/
-       blah.js
 
 options.apidir = "api";
 ```
@@ -90,33 +90,35 @@ pages/
         layout.jade
     foo/
         foo.jade
-        foo.coffee
+        foo_front.coffee
     index.jade
-    pages.json
+    pages_back.coffee
 
 options.pagesdir = "pages";
 ```
 
-And a pages.json having
+And a pages_back.coffee having
 
 ```
-{
-    "pages": [
-        {
-            "route": "/",
-            "viewFile": "index.jade"
-        },
-        {
-            "route": "/foo",
-            "viewFile": "foo/foo.jade",
-            "preload": ["/api/foo"]
-        },
-        {
-            "route": "/bar",
-            "viewFile": "bar.jade"
-        }
-    ]
-}
+synthify = require('synthify')
+
+getIndex = (req, res) ->
+    res.render("index.jade")
+
+getFoo = (req, res) ->
+    synthify.apiPreload(req, res, "/api/foo", (data) ->
+        res.render("foo/foo.jade", {preloadData: data})
+    )
+
+getBar = (req, res) ->
+    res.render("bar.jade")
+
+module.exports.synthup = [
+    {route: '/', method: "get", fn: getIndex}
+    {route: '/foo', method: "get", fn: getFoo}
+    {route: '/bar', method: "get", fn: getBar}
+]
+
 ```
 
 You get the following routes
@@ -127,7 +129,7 @@ http://localhost:3000/foo - preloads /api/foo and serves
 pages/foo/foo.jade
 http://localhost:3000/bar - serves pages/bar.jade
 http://localhost:3000/api/tweets - serves
-api/tweets/[getIndex.js:getIndex()]
+api/foo/[getIndex.js:getIndex()]
 ```
 
 
