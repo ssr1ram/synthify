@@ -1,9 +1,9 @@
 var path = require('path');
 var request = require('request');
+var fs = require('fs');
 
 var apiParser = require('./lib/apiParser.js');
 var pagesParser = require('./lib/pagesParser.js');
-var routeParser = require('./lib/routeParser.js');
 
 var defaultoptions = {
     apidir: 'api',
@@ -62,17 +62,23 @@ module.exports.doroutes = function(app, options) {
   var options = options || {};
   options.pagesdir = options.pagesdir || defaultoptions.pagesdir;
   var resourceDir = options.resourceDir || path.join(process.cwd(), options.pagesdir);
-  var routehandlers = routeParser.parse(resourceDir);
-  var registerHandler = function (handler) {
-    app[handler.method]( handler.path, handler.funcName );
-  };
-  /* Register the custom actions first */
-  routehandlers.filter(function (handler) {
-    return handler.isCustom;
-  }).forEach(registerHandler);
-  routehandlers.filter(function (handler) {
-    return !handler.isCustom;
-  }).forEach(registerHandler);
+  var resourceStack = [];
+  (function parseDir (dir) {
+    var contents = fs.readdirSync(dir).sort();
+    contents.forEach(function (file) {
+      if ( /route\.(js|coffee)$/.test(file) ) {
+          var module = require(dir + '/' + file);
+          console.log(file)
+          module.route(app)
+      } else {
+          if (fs.statSync(dir + '/' + file).isDirectory()) {
+                resourceStack.push(file);
+                parseDir(dir + '/' + file);
+                resourceStack.pop();
+          }
+      }
+    });
+  })(resourceDir);
 };
 
 module.exports.apiPreload = function(req, res, preloadRoute, cb) {
