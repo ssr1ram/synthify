@@ -68,7 +68,7 @@ module.exports.doroutes = function(app, options) {
     contents.forEach(function (file) {
       if ( /route\.(js|coffee)$/.test(file) ) {
           var module = require(dir + '/' + file);
-          module.route(app)
+          module.route(app, options)
       } else {
           if (fs.statSync(dir + '/' + file).isDirectory()) {
                 resourceStack.push(file);
