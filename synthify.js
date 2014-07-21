@@ -68,7 +68,6 @@ module.exports.doroutes = function(app, options) {
     contents.forEach(function (file) {
       if ( /route\.(js|coffee)$/.test(file) ) {
           var module = require(dir + '/' + file);
-          console.log(file)
           module.route(app)
       } else {
           if (fs.statSync(dir + '/' + file).isDirectory()) {
