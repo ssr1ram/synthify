@@ -1,24 +1,21 @@
 {
   "name": "synthify",
-  "version": "0.1.2",
+  "version": "0.0.3",
+  "description": "used by Yeoman synthify generator",
+  "license": "MIT",
+  "repository": "ssr1ram/synthify",
   "author": {
-    "name": "Srinivasan Sriram",
-    "email": "ssriram@gmail.com"
-  },
-  "description": "A minimalist component-ized fork of Jon Abrams synth. The easiest web framework for synthesizing API-first web apps that also have web front-ends.",
-  "dependencies": {
-    "request": "~2.36.0"
-  },
-  "devDependencies": {
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/ssr1ram/synthify"
+    "name": "S. Sriram",
+    "email": "ssriram@gmail.com",
+    "url": "https://github.com/ssr1ram"
   },
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">=0.10.0"
   },
-  "main": "synthify.js",
-  "readme": "# SYNTH\n\nA minimalist component-ized fork of Jon Abrams synth. The easiest web framework for synthesizing API-first web apps that also have web front-ends.\n\n## Current status\n\n**Version 0.4.15 (latest)**:\n\n**Note:** Despite being fully functional, **_synth_ is not yet ready for production**. It hasn't been tested in production and since it's in active development, implementation and interface details are likely to change rapidly.\n\n[![Build Status](https://travis-ci.org/JonAbrams/synth.png?branch=master)](https://travis-ci.org/JonAbrams/synth)\n[![Code Climate](https://codeclimate.com/github/JonAbrams/synth.png)](https://codeclimate.com/github/JonAbrams/synth)\n\n_Synth_ is an API-first web app framework (built on NodeJS) that provides the following features:\n\n- Easily created new RESTful API resources by just creating folders and naming functions a certain way.\n- Preload angular model data on page load (saving an extra roundtrip).\n- Preload html view on page load (saving another extra roundtrip!)\n- A simplified project structure where front-end code (angular code, html, css, bower packages, etc) is in the 'front' folder and back-end code (node code and node packages) are in the 'back' folder.\n- A command-line tool for installing third party packages, using npm + bower, that auto-updates manifest files.\n- Auto compilation of assets on request for dev, and pre-compilation for prod (including minification and ngmin).\n- Auto-restarts the server when changes are detected.\n- Support for various back-end and front-end templates to help get a new project going quickly.\n\n## Documentation\n\nFor complete up-to-date documentation, tutorials, and example apps, check out [synthjs.com](http://www.synthjs.com).\n\n## License\n\n[MIT](https://github.com/JonAbrams/synth/blob/master/LICENSE)\n\n## Credit\n\n- This project was created by Jon Abrams ([Twitter](https://twitter.com/JonathanAbrams) | [GitHub](https://github.com/JonAbrams)).\n- Special thanks to Stephen Ausman (aka [stackd](https://github.com/stackd)) for handing over control of the 'synth' package on NPM.\n",
-  "readmeFilename": "README.md"
+  "keywords": [
+    "synthify"
+  ],
+  "dependencies": {
+    "request": ">= 0.0.0"
+  }
 }
