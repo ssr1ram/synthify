@@ -1,23 +1,32 @@
 # SYNTHIFY
 
-A minimalist component-ized fork of Jon Abrams synth. The easiest web framework for synthesizing API-first web apps that also have web front-ends.
+A minimalist component-ized way of automating an api and routes within an expressjs node app.
 
 ## Dependencies
 
-```
-npm install yo -g
-npm install gulp -g
+```bash
+$ npm install yo -g
+$ npm install gulp -g
 ```
 
 ## Install
 
-The easiest way to get started is to use the yeoman generator
-
+```bash
+$ npm install synthify
 ```
-# yo install git+https://github.com/ssr1ram/generator-synthify.git -g`
-# mkdir project
-# cd project
-# yo synthify
+
+## Yeoman generator
+
+The easiest way to get started is to generate an app using the
+generator-synthify module see:
+http://github.com/ssr1ram/generator-synthify
+
+```bash
+$ npm install -g generator-synthify
+$ mkdir myproject
+$ cd myproject
+$ yo synthify
+```
 
 ## Example Usage
 
@@ -49,8 +58,6 @@ Base directory structure
 api/
    foo/
        getIndex.js
-
-options.apidir = "api";
 ```
 
 You can then declare a request handler for a specific HTTP method in any file that is in the resources directory by assigning a function to exports.<method><optional: ActionName>.
@@ -91,13 +98,25 @@ pages/
     foo/
         foo.jade
         foo_front.coffee
+        route.coffee
     index.jade
-    pages_back.coffee
+    pages.coffee
+    route.coffee
 
-options.pagesdir = "pages";
 ```
 
-And a pages_back.coffee having
+## special file names
+
+* foo_front.js or foo_front.coffee is the entry browserify file  used by
+  gulp and the resulting file is placed in public/js/..(relative
+  path)/foo.js (and foo.min.js)
+* route.coffee is used by synthify to set routes
+* foo.less and foo.css files are processed by gulp and resulting files placed
+  in public/css/..(relative path)/foo.css
+
+## synthify api
+
+pages.coffee having
 
 ```
 synthify = require('synthify')
@@ -113,23 +132,6 @@ getFoo = (req, res) ->
 getBar = (req, res) ->
     res.render("bar.jade")
 
-module.exports.synthup = [
-    {route: '/', method: "get", fn: getIndex}
-    {route: '/foo', method: "get", fn: getFoo}
-    {route: '/bar', method: "get", fn: getBar}
-]
-
-```
-
-You get the following routes
-
-```
-http://localhost:3000/ - serves pages/index.jade
-http://localhost:3000/foo - preloads /api/foo and serves
-pages/foo/foo.jade
-http://localhost:3000/bar - serves pages/bar.jade
-http://localhost:3000/api/tweets - serves
-api/foo/[getIndex.js:getIndex()]
 ```
 
 
